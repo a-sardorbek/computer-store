@@ -38,6 +38,8 @@ public class SystemUser {
     private boolean isActive;
     private boolean isNotActive;
 
+    public SystemUser(){}
+
     public SystemUser(Long id
                     , String userId
                     , String fio
