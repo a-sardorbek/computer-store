@@ -1,4 +1,4 @@
-package com.system.ws.domain;
+package com.system.ws.domain.entity;
 
 import javax.persistence.*;
 import java.util.Date;
