@@ -41,12 +41,12 @@ public class SystemUserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return systemUser.getPassword();
+        return this.systemUser.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return systemUser.getUsername();
+        return this.systemUser.getUsername();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class SystemUserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return systemUser.isNotActive();
+        return this.systemUser.isNotLocked();
     }
 
     @Override
@@ -66,6 +66,6 @@ public class SystemUserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return systemUser.isActive();
+        return this.systemUser.isActive();
     }
 }

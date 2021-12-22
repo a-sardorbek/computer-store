@@ -1,5 +1,7 @@
 package com.system.ws.domain.entity;
 
+import org.hibernate.tool.schema.extract.spi.ColumnInformation;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -12,7 +14,7 @@ public class SystemUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = NUMBER_GENERATOR)
-    @SequenceGenerator(name=NUMBER_GENERATOR, sequenceName = SEQUENCE_NAME)
+    @SequenceGenerator(name=NUMBER_GENERATOR, sequenceName = SEQUENCE_NAME,allocationSize = 1)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
@@ -25,6 +27,10 @@ public class SystemUser {
     private String username;
     private String password;
 
+    @Transient
+    private String password2;
+
+    @Lob
     private byte[] profileImage;
 
     private Date lastLoginDate;
@@ -36,7 +42,7 @@ public class SystemUser {
 
 
     private boolean isActive;
-    private boolean isNotActive;
+    private boolean isNotLocked;
 
     public SystemUser(){}
 
@@ -52,7 +58,7 @@ public class SystemUser {
                     , String role
                     , String[] authorities
                     , boolean isActive
-                    , boolean isNotActive) {
+                    , boolean isNotLocked) {
         this.id = id;
         this.userId = userId;
         this.fio = fio;
@@ -65,7 +71,7 @@ public class SystemUser {
         this.role = role;
         this.authorities = authorities;
         this.isActive = isActive;
-        this.isNotActive = isNotActive;
+        this.isNotLocked = isNotLocked;
     }
 
     public Long getId() {
@@ -106,6 +112,14 @@ public class SystemUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
     }
 
     public byte[] getProfileImage() {
@@ -164,11 +178,11 @@ public class SystemUser {
         isActive = active;
     }
 
-    public boolean isNotActive() {
-        return isNotActive;
+    public boolean isNotLocked() {
+        return isNotLocked;
     }
 
-    public void setNotActive(boolean notActive) {
-        isNotActive = notActive;
+    public void setNotLocked(boolean notLocked) {
+        isNotLocked = notLocked;
     }
 }

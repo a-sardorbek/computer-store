@@ -76,6 +76,11 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());
     }
 
+    @ExceptionHandler(PasswordMatchException.class)
+    public ResponseEntity<HttpResponse> usernameExistException(PasswordMatchException exception) {
+        return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
     @ExceptionHandler(UsernameExistException.class)
     public ResponseEntity<HttpResponse> usernameExistException(UsernameExistException exception) {
         return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
@@ -92,11 +97,11 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(METHOD_NOT_ALLOWED, String.format(METHOD_IS_NOT_ALLOWED, supportedMethod));
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<HttpResponse> internalServerErrorException(Exception exception) {
-        LOGGER.error(exception.getMessage());
-        return createHttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<HttpResponse> internalServerErrorException(Exception exception) {
+//        LOGGER.error(exception.getMessage());
+//        return createHttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
+//    }
 
     @ExceptionHandler(NoResultException.class)
     public ResponseEntity<HttpResponse> notFoundException(NoResultException exception) {
