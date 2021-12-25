@@ -1,7 +1,6 @@
 package com.system.ws.service;
 
 import com.system.ws.domain.entity.Product;
-import com.system.ws.exception.ProductNotFoundException;
 
 import java.util.List;
 import java.util.Optional;

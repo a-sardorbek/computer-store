@@ -2,7 +2,6 @@ package com.system.ws.service.impl;
 
 import com.system.ws.constant.SystemUserConstant;
 import com.system.ws.domain.SystemUserPrincipal;
-import com.system.ws.domain.entity.Product;
 import com.system.ws.domain.entity.SystemUser;
 import com.system.ws.enumeration.Role;
 import com.system.ws.exception.PasswordMatchException;

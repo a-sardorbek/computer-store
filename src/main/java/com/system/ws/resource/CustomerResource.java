@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -35,6 +36,7 @@ public class CustomerResource {
     }
 
     @GetMapping("/allCustomer")
+    @PreAuthorize("hasAnyAuthority('system:create')")
     public ResponseEntity<Page<Customer>> getAllCustomer(@RequestParam("offset")String offset,
                                                          @RequestParam("pageSize")String pageSize) throws CustomersNotFoundException {
         Page<Customer> customers = customerService.findCustomerWithPaging(Integer.parseInt(offset),Integer.parseInt(pageSize));

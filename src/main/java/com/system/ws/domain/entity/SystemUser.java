@@ -1,7 +1,5 @@
 package com.system.ws.domain.entity;
 
-import org.hibernate.tool.schema.extract.spi.ColumnInformation;
-
 import javax.persistence.*;
 import java.util.Date;
 

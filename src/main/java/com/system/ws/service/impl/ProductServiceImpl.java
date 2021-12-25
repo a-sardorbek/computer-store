@@ -1,7 +1,6 @@
 package com.system.ws.service.impl;
 
 import com.system.ws.domain.entity.Product;
-import com.system.ws.exception.ProductNotFoundException;
 import com.system.ws.repository.ProductRepo;
 import com.system.ws.service.ProductService;
 import org.apache.commons.lang3.RandomStringUtils;

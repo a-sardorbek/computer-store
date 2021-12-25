@@ -1,6 +1,5 @@
 package com.system.ws.listener;
 
-import com.system.ws.domain.SystemUserPrincipal;
 import com.system.ws.service.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;

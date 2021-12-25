@@ -2,7 +2,6 @@ package com.system.ws.resource;
 
 import com.system.ws.constant.SecurityConstant;
 import com.system.ws.domain.SystemUserPrincipal;
-import com.system.ws.domain.entity.Product;
 import com.system.ws.domain.entity.SystemUser;
 import com.system.ws.dto.LoginSystemUser;
 import com.system.ws.dto.RegisterSystemUser;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +39,7 @@ public class SystemUserResource {
 
 
     @PostMapping("/register")
+    @PreAuthorize("hasAnyAuthority('system:create')")
     public ResponseEntity<?> register(@RequestBody RegisterSystemUser systemUser) throws  UsernameExistException, PasswordMatchException, IOException {
         systemUserService.register(systemUser.getFio(),systemUser.getUsername(),systemUser.getPassword1(), systemUser.getPassword2());
         return new ResponseEntity<>(HttpStatus.OK);

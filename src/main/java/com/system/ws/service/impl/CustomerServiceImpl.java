@@ -2,7 +2,6 @@ package com.system.ws.service.impl;
 
 import com.system.ws.domain.entity.Customer;
 import com.system.ws.domain.entity.Product;
-import com.system.ws.dto.CustomerRequest;
 import com.system.ws.exception.CustomersNotFoundException;
 import com.system.ws.repository.CustomerRepo;
 import com.system.ws.repository.ProductRepo;
@@ -10,16 +9,11 @@ import com.system.ws.service.CustomerService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +39,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .stream()
                 .map(p->{
                     Product product = productRepo.findById(p.getId()).get();
-//                    product.addCustomer(customer);
                     return product;
                     })
                 .collect(Collectors.toSet()));
