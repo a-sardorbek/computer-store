@@ -2,10 +2,12 @@ package com.system.ws.service.impl;
 
 import com.system.ws.constant.SystemUserConstant;
 import com.system.ws.domain.SystemUserPrincipal;
+import com.system.ws.domain.entity.Product;
 import com.system.ws.domain.entity.SystemUser;
 import com.system.ws.enumeration.Role;
 import com.system.ws.exception.PasswordMatchException;
 import com.system.ws.exception.UsernameExistException;
+import com.system.ws.repository.ProductRepo;
 import com.system.ws.repository.SystemUserRepo;
 import com.system.ws.service.LoginAttemptService;
 import com.system.ws.service.SystemUserService;
@@ -33,12 +35,17 @@ public class SystemUserServiceImpl implements SystemUserService, UserDetailsServ
     private SystemUserRepo systemUserRepo;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private LoginAttemptService loginAttemptService;
+    private ProductRepo productRepo;
 
     @Autowired
-    public SystemUserServiceImpl(SystemUserRepo systemUserRepo, BCryptPasswordEncoder bCryptPasswordEncoder,LoginAttemptService loginAttemptService) {
+    public SystemUserServiceImpl(SystemUserRepo systemUserRepo
+                                ,BCryptPasswordEncoder bCryptPasswordEncoder
+                                ,LoginAttemptService loginAttemptService
+                                ,ProductRepo productRepo) {
         this.systemUserRepo = systemUserRepo;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.loginAttemptService = loginAttemptService;
+        this.productRepo = productRepo;
     }
 
     @Override
@@ -59,17 +66,6 @@ public class SystemUserServiceImpl implements SystemUserService, UserDetailsServ
       }
     }
 
-    private void validateLoginAttempt(SystemUser systemUser) {
-        if(systemUser.isNotLocked()){
-            if(loginAttemptService.hasExceededMaxAttempts(systemUser.getUsername())){
-                systemUser.setNotLocked(false);
-            }else{
-                systemUser.setNotLocked(true);
-            }
-        }else {
-             loginAttemptService.deleteSystemUserFromLoginAttemptCache(systemUser.getUsername());
-        }
-    }
 
     @Override
     public SystemUser register(String fio, String username, String password1, String password2) throws UsernameExistException, IOException, PasswordMatchException {
@@ -94,6 +90,19 @@ public class SystemUserServiceImpl implements SystemUserService, UserDetailsServ
     @Override
     public SystemUser findUserByUsername(String username) {
         return systemUserRepo.findUserByUsername(username);
+    }
+
+
+    private void validateLoginAttempt(SystemUser systemUser) {
+        if(systemUser.isNotLocked()){
+            if(loginAttemptService.hasExceededMaxAttempts(systemUser.getUsername())){
+                systemUser.setNotLocked(false);
+            }else{
+                systemUser.setNotLocked(true);
+            }
+        }else {
+            loginAttemptService.deleteSystemUserFromLoginAttemptCache(systemUser.getUsername());
+        }
     }
 
     private byte[] getImageFromURL(String username) throws IOException{

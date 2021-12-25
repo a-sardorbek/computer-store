@@ -2,9 +2,11 @@ package com.system.ws.resource;
 
 import com.system.ws.constant.SecurityConstant;
 import com.system.ws.domain.SystemUserPrincipal;
+import com.system.ws.domain.entity.Product;
 import com.system.ws.domain.entity.SystemUser;
+import com.system.ws.dto.LoginSystemUser;
+import com.system.ws.dto.RegisterSystemUser;
 import com.system.ws.exception.PasswordMatchException;
-import com.system.ws.exception.SystemUserNotFoundException;
 import com.system.ws.exception.UsernameExistException;
 import com.system.ws.service.SystemUserService;
 import com.system.ws.utility.JwtTokenProvider;
@@ -14,17 +16,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
-@RequestMapping("/user")
+@RequestMapping(path={"/","/user"})
 public class SystemUserResource {
 
 
@@ -39,21 +36,23 @@ public class SystemUserResource {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<SystemUser> register(@RequestBody SystemUser user) throws SystemUserNotFoundException, UsernameExistException, PasswordMatchException, IOException {
-        SystemUser newUser = systemUserService.register(user.getFio(),user.getUsername(),user.getPassword(), user.getPassword2());
-        return new ResponseEntity<>(newUser, OK);
 
-        // here we should validate email, name surname starts with upper case because for users we cannot trust
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegisterSystemUser systemUser) throws  UsernameExistException, PasswordMatchException, IOException {
+        systemUserService.register(systemUser.getFio(),systemUser.getUsername(),systemUser.getPassword1(), systemUser.getPassword2());
+        return new ResponseEntity<>(HttpStatus.OK);
+
+        // here we should validate email, name surname starts with upper case
     }
 
     @PostMapping("/login")
-    public ResponseEntity<SystemUser> login(@RequestBody SystemUser systemUser){
-        authenticateUser(systemUser.getUsername(),systemUser.getPassword());
-        SystemUser loginUser =systemUserService.findUserByUsername(systemUser.getUsername());
-        SystemUserPrincipal systemUserPrincipal = new SystemUserPrincipal(loginUser);
+    public ResponseEntity<HttpHeaders> login(@RequestBody LoginSystemUser loginUser){
+        authenticateUser(loginUser.getUsername(),loginUser.getPassword());
+        SystemUser systemUser =systemUserService.findUserByUsername(loginUser.getUsername());
+        SystemUserPrincipal systemUserPrincipal = new SystemUserPrincipal(systemUser);
         HttpHeaders jwtHeader = getJwtHeader(systemUserPrincipal);
-        return new ResponseEntity<>(loginUser,jwtHeader, HttpStatus.OK);
+        return new ResponseEntity<>(jwtHeader, HttpStatus.OK);
     }
 
     private HttpHeaders getJwtHeader(SystemUserPrincipal systemUserPrincipal) {

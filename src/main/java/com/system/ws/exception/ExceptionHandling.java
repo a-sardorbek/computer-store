@@ -12,6 +12,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +52,7 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(HttpStatus.NOT_FOUND, "There is no mapping for this URL");
     }
 
+
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<HttpResponse> accountDisabledException(){
         return createHttpResponse(HttpStatus.BAD_REQUEST, ACCOUNT_DISABLED);
@@ -77,13 +79,28 @@ public class ExceptionHandling implements ErrorController {
     }
 
     @ExceptionHandler(PasswordMatchException.class)
-    public ResponseEntity<HttpResponse> usernameExistException(PasswordMatchException exception) {
+    public ResponseEntity<HttpResponse> passwordMatchException(PasswordMatchException exception) {
         return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
     @ExceptionHandler(UsernameExistException.class)
     public ResponseEntity<HttpResponse> usernameExistException(UsernameExistException exception) {
         return createHttpResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<HttpResponse> productNotFoundException(ProductNotFoundException exception) {
+        return createHttpResponse(NOT_FOUND, exception.getMessage());
+    }
+
+    @ExceptionHandler(CustomersNotFoundException.class)
+    public ResponseEntity<HttpResponse> productNotFoundException(CustomersNotFoundException exception) {
+        return createHttpResponse(NOT_FOUND, exception.getMessage());
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<HttpResponse> customerExistException(UsernameNotFoundException exception) {
+        return createHttpResponse(NOT_FOUND, exception.getMessage());
     }
 
     @ExceptionHandler(SystemUserNotFoundException.class)
@@ -97,11 +114,11 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(METHOD_NOT_ALLOWED, String.format(METHOD_IS_NOT_ALLOWED, supportedMethod));
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<HttpResponse> internalServerErrorException(Exception exception) {
-//        LOGGER.error(exception.getMessage());
-//        return createHttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<HttpResponse> internalServerErrorException(Exception exception) {
+        LOGGER.error(exception.getMessage());
+        return createHttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
+    }
 
     @ExceptionHandler(NoResultException.class)
     public ResponseEntity<HttpResponse> notFoundException(NoResultException exception) {

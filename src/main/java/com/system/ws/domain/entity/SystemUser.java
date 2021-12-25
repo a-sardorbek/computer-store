@@ -27,9 +27,6 @@ public class SystemUser {
     private String username;
     private String password;
 
-    @Transient
-    private String password2;
-
     @Lob
     private byte[] profileImage;
 
@@ -114,13 +111,6 @@ public class SystemUser {
         this.password = password;
     }
 
-    public String getPassword2() {
-        return password2;
-    }
-
-    public void setPassword2(String password2) {
-        this.password2 = password2;
-    }
 
     public byte[] getProfileImage() {
         return profileImage;
